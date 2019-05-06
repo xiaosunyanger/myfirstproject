@@ -10,14 +10,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
-// 增加express
-const express = require('express')
-const app = express()
-//加载项目根目录下模拟的本地json数据文件
-var appData = require('./../mook/goods.json')//加载本地数据文件
-var apiRoutes = express.Router()
-// '/api'是自定义的前缀路径
-app.use('/api', apiRoutes)
+// // 增加express
+// const express = require('express')
+// const app = express()
+// //加载项目根目录下模拟的本地json数据文件
+// var appData = require('./../mook/goods.json')//加载本地数据文件
+// var apiRoutes = express.Router()
+// // '/api'是自定义的前缀路径
+// app.use('/api', apiRoutes)
 
 
 const HOST = process.env.HOST
@@ -29,6 +29,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
+
 
   // these devServer options should be customized in /config/index.js
   devServer: {
@@ -56,14 +57,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       poll: config.dev.poll,
     },
     
-    before(app) {
-      app.get('/api/appData', (req, res) => {
-        res.json({
-          errno: 0,
-          data: appData
-        })
-      })
-    }
+    // before(app) {
+    //   app.get('/api/appData', (req, res) => {
+    //     res.json({
+    //       errno: 0,
+    //       data: appData
+    //     })
+    //   })
+    // }
   },
 
   plugins: [

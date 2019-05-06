@@ -5,6 +5,7 @@
   display: block;
   content: " ";
   clear: both;
+  height: 0;
 }
 
 .accessory-list > ul > li {
