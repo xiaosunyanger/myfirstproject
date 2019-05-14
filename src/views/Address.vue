@@ -60,21 +60,21 @@
         <div class="addr-list-wrap">
           <div class="addr-list">
             <ul>
-              <li v-for="item in addressList">
+              <li v-for="(item,index) in addressListFilter" :class="{'check':checkIndex==index}" @click="checkIndex=index;selectAddressId=item.addressId">
                 <dl>
                   <dt>{{item.userName}}</dt>
                   <dd class="address">{{item.streetName}}</dd>
                   <dd class="tel">{{item.tel}}</dd>
                 </dl>
                 <div class="addr-opration addr-del">
-                  <a href="javascript:;" class="addr-del-btn">
+                  <a href="javascript:;" class="addr-del-btn" @click="delAddressConfirm(item.addressId)">
                     <svg class="icon icon-del"><use xlink:href="#icon-del"></use></svg>
                   </a>
                 </div>
                 <div class="addr-opration addr-set-default">
-                  <a href="javascript:;" class="addr-set-default-btn"><i>Set default</i></a>
+                  <a href="javascript:;" class="addr-set-default-btn" v-show="!item.isDefault" @click="setDefault(item.addressId)"><i>设为默认地址</i></a>
                 </div>
-                <div class="addr-opration addr-default">Default address</div>
+                <div class="addr-opration addr-default" v-show="item.isDefault">默认地址</div>
               </li>
               <li class="addr-new">
                 <div class="add-new-inner">
@@ -88,7 +88,7 @@
           </div>
 
           <div class="shipping-addr-more">
-            <a class="addr-more-btn up-down-btn" href="javascript:;">
+            <a class="addr-more-btn up-down-btn" href="javascript:;" @click="expand" :class="{'open':limit>3}">
               more
               <i class="i-up-down">
                 <i class="i-up-down-l"></i>
@@ -119,11 +119,18 @@
           </div>
         </div>
         <div class="next-btn-wrap">
-          <a class="btn btn--m btn--red">Next</a>
+          <router-link class="btn btn--m btn--red" v-bind:to="{path:'orderConfirm',query:{'addressId':selectAddressId}}">Next</router-link>
         </div>
       </div>
       </div>
       </div>
+      <Modal :mdShow="isMdShow" @close='closeModal'>
+          <p slot="message">您是否确认删除该地址</p>
+            <div slot="btnGroup">
+            <a class="btn btn--m" href="javascript:;" @click="delAddress">确定</a>
+            <a class="btn btn--m" href="javascript:;" @click="isMdShow=false">取消</a>
+        </div>   
+      </Modal>
     <nav-footer></nav-footer>
 </div>
 
@@ -135,6 +142,8 @@ import NavFooter from   '@/components/NavFooter'
 import NavBread from   '@/components/NavBread'
 import Modal from   '@/components/Modal'
 import axios from 'axios'
+import { retry } from 'statuses';
+import { constants } from 'fs';
 export default {
     components:{
         NavHeader,
@@ -146,14 +155,23 @@ export default {
       return{
         limit:3,
         addressList:[],
+        checkIndex:'',
+        isMdShow:false,
+        addressId:'',
+        selectAddressId:'',
       }
     },
     computed:{
+      //默认只展示三个地址
+      addressListFilter(){
+        return this.addressList.slice(0,this.limit)
+      },
     },
     mounted(){
       this.init();
     },
     methods:{
+      //获取地址列表
       init(){
         axios.get("/users/addressList").then((response)=>{
           let res=response.data;
@@ -161,7 +179,54 @@ export default {
             this.addressList=res.result;
           }
         })
-      }
+      },
+
+      //进行地址列表的展开与收缩
+      expand(){
+        if(this.limit==3){
+          this.limit=this.addressList.length;
+        }else{
+          this.limit=3;
+        }
+      },
+
+      //设置默认地址
+      setDefault(addressId){
+        axios.post("/users/setDefault").then((response)=>{
+          let res=response.data;
+          if(res.status=='0'){
+            console.log('设置默认地址成功');
+            this.init();
+          }
+        })
+      },
+    //用来关闭模态框
+    closeModal(){
+      this.isMdShow=false;
+    },
+    //点击删除时的操作
+    delAddressConfirm(addressId){
+      this.isMdShow=true;
+      this.addressId=addressId;
+    },
+    delAddress(){
+      axios.post('/users/delAddress',{addressId:this.addressId}).then((response)=>{
+        let res=response.data;
+        if(res.status=='0'){
+          console.log("删除成功");
+           this.addressList.forEach((item)=>{
+          if(item.addressId==this.addressId){
+             this.addressList.splice( this.addressList.indexOf(this.addressId),1);
+          }else{
+          return;
+          };
+          this.isMdShow=false;
+       })
+    }
+      });
+      //先在页面上删除要删除的地址
+     
+    }
     },
 }
 </script>

@@ -123,30 +123,30 @@ router.get("/checkLogin", function (req,res,next) {
   });
 
   //商品数目加减接口
-  router.post("/cartEdit", function (req,res,next)    {
-      var userId = req.cookies.userId,
-          productId = req.body.productId,
-          productNum = req.body.productNum,
-          checked = req.body.checked;
-      User.update({"userId":userId,   "cartList.productId":productId},{
-        "cartList.$.productNum":productNum,
-        "cartList.$.checked":checked,
-      }, function (err,doc) {
-        if(err){
-          res.json({
-            status:'1',
-            msg:err.message,
-            result:''
-          });
-        }else{
-          res.json({
-            status:'0',
-            msg:'',
-            result:'suc'
-          });
-        }
-      })
-    });
+  router.post("/cartEdit", function (req,res,next)      {
+        var userId = req.cookies.userId,
+            productId = req.body.productId,
+            productNum = req.body.productNum,
+            checked = req.body.checked;
+        User.update({"userId":userId,   "cartList.productId":productId},{
+          "cartList.$.productNum":productNum,
+          "cartList.$.checked":checked,
+        }, function (err,doc) {
+          if(err){
+            res.json({
+              status:'1',
+              msg:err.message,
+              result:''
+            });
+          }else{
+            res.json({
+              status:'0',
+              msg:'',
+              result:'suc'
+            });
+          }
+        })
+      });
 
   //购物车全选接口
   router.post("/cartCheckAll",(req,res,next)=>{
@@ -181,7 +181,10 @@ router.get("/checkLogin", function (req,res,next) {
         }
       }
     })
-  })
+  });
+
+
+  
   //获取地址列表接口
   router.get('/addressLIst',(req,res,next)=>{
     var userId=req.cookies.userId;
@@ -201,4 +204,78 @@ router.get("/checkLogin", function (req,res,next) {
       }
     })
   })
+
+  //设置默认地址接口
+  router.post("/setDefault",(req,res,next)=>{
+    let userId=req.cookies.userId,addressId=req.body.addressId;
+    if(!addressId){
+      res.json({
+        status:'1003',
+        msg:'addressId没有传输过来',
+        result:'',
+      })
+    }else{
+      User.findOne({userId:userId},(err,doc)=>{
+        if(err){
+          res.json({
+            status:'1',
+            msg:'addressId没有传输过来',
+            result:'',
+          })
+        }else{
+          doc.addressList.forEach((item)=>{
+            if(item.addressId==addressId){
+              item.isDefault=true;
+            }else{
+              item.isDefault=false;
+            }
+          });
+          doc.save((err1,doc)=>{
+            if(err1){
+              res.json({
+                status:'1',
+                msg:err1.message,
+                result:'',
+              })
+            }else{
+              res.json({
+                status:'0',
+                msg:err1.message,
+                result:'',
+              })
+            }
+          })
+        }
+      })
+    }
+  })
+
+  //删除地址接口
+  router.post("/delAddress", (req,res,next)=>{
+    var userId = req.cookies.userId,addressId = req.body.addressId;
+    User.update({
+      userId:userId
+    },{
+      $pull:{
+        'addressList':{
+          'addressId':addressId
+        }
+      }
+    }, function (err,doc) {
+        if(err){
+          res.json({
+              status:'1',
+              msg:err.message,
+              result:''
+          });
+        }else{
+          res.json({
+            status:'0',
+            msg:'',
+            result:''
+          });
+        }
+    });
+  });
+
 module.exports = router;

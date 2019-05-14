@@ -31,7 +31,7 @@
                       <li v-for='item in GoodsList'>
                         <div class="pic">
                           <!-- 图片里用了懒加载 -->
-                          <a href="#"><img v-lazy="'static/'+item.productImage" alt=""></a>
+                          <a href="#"><img v-lazy="'./../../static/'+item.productImage" alt=""></a>
                         </div>
                         <div class="main">
                           <div class="name">{{item.productName}}</div>
@@ -44,7 +44,7 @@
                     </ul>
                     <!-- 无限滚动插件-->
                     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" class="loade-more">
-                     <img src="./../assets/loading-spinning-bubbles.svg" v-show="loading">
+                     <img src="./../assets/loading-cylon.svg" v-show="loading">
                     </div>  
                   </div>
                 </div>
@@ -162,8 +162,8 @@ export default {
       setpricefilter(index){
         this.pricechecked=index;
         this.closePop();
-        this.getGoodsList();
         this.page=1;
+        this.getGoodsList();
       },//实现价格过滤并且使得被选中的价格区间颜色变成选中状态
       filterpop(){
         this.filterBy=true;
