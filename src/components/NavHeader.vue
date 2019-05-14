@@ -62,7 +62,7 @@
                   </li>
                   <li class="regi_form_input noMargin">
                     <i class="icon IconPwd"></i>
-                    <input type="password" tabindex="2"  name="password" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Password" v-model="userPwd">
+                    <input type="password" tabindex="2"  name="password" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Password" v-model="userPwd" @keyup.enter='login'>
                   </li>
                 </ul>
               </div>
@@ -160,15 +160,15 @@
         }
       },
       mounted(){
-        this.checkLog();
+        this.checkLogin();
       },
       methods:{
         //登录校验,查看是否登录
-        checkLog(){
-          axios.get("/users/checkLog").then((response)=>{
+        checkLogin(){
+          axios.get("/users/checkLogin").then((response)=>{
             let res=response.data;
             if(res.status=='0'){
-              this.nickName=res.result.userName;
+              this.nickName=res.result;
             }
           })
         },
@@ -176,7 +176,7 @@
         login(){
           if(!this.userName||!this.userPwd){
             this.errorTip=true;
-            return;
+             return;
           };
           axios.post("/users/login",{
             userName:this.userName,

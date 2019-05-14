@@ -9,7 +9,6 @@ var usersRouter = require('./routes/users');
 var goods=require('./routes/goods');
 var ejs=require("ejs");
 
-
 var app = express();
 
 // view engine setup
@@ -27,21 +26,23 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/goods',goods);
 
-app.use((req,res,next)=>{
+//登录拦截
+app.use(function (req,res,next) {
   if(req.cookies.userId){
     next();
   }else{
-    if(req.originalUrl=="/users/login"||req.originalUrl=="/users/logout"||req.originalUrl.indexOf('/goods/list')>-1){
-      next();
-    }else{
-      res.json({
-        status:"1001",
-        msg:"当前未登录，请先登录",
-        result:"",
-      })
-    }
+      console.log("url:"+req.originalUrl);
+      if(req.originalUrl=='/users/login' || req.originalUrl=='/users/logout' ||req.originalUrl.indexOf('/goods/list')>-1){
+          next();
+      }else{
+          res.json({
+            status:'10001',
+            msg:'当前未登录',
+            result:''
+          });
+      }
   }
-})
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
