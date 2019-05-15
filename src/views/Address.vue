@@ -41,15 +41,25 @@
       <div class="container">
       <div class="checkout-addr">
         <div class="page-title-normal">
-          <h2 class="page-title-h2"><span>check out</span></h2>
+          <h2 class="page-title-h2">
+            <span>check out</span>
+          </h2>
         </div>
         <!-- process step -->
         <div class="check-step">
           <ul>
-            <li class="cur"><span>Confirm</span> address</li>
-            <li><span>View your</span> order</li>
-            <li><span>Make</span> payment</li>
-            <li><span>Order</span> confirmation</li>
+            <li class="cur">
+              <span>确认地址</span>
+             </li>
+            <li>
+              <span>查看订单</span> 
+            </li>
+            <li>
+              <span>支付</span> 
+            </li>
+            <li>
+              <span>支付确认</span>
+            </li>
           </ul>
         </div>
 
@@ -59,7 +69,9 @@
         </div>
         <div class="addr-list-wrap">
           <div class="addr-list">
+            <!-- 地址列表 -->
             <ul>
+              <!--当地址被点击时，绑定样式，且指定向下一环节（订单确认环节）传递选中的地址-->
               <li v-for="(item,index) in addressListFilter" :class="{'check':checkIndex==index}" @click="checkIndex=index;selectAddressId=item.addressId">
                 <dl>
                   <dt>{{item.userName}}</dt>
@@ -72,6 +84,7 @@
                   </a>
                 </div>
                 <div class="addr-opration addr-set-default">
+                  <!-- 设默认地址模块，只有从数据库里拿出的地址有isDefault属性才默认是默认地址 -->
                   <a href="javascript:;" class="addr-set-default-btn" v-show="!item.isDefault" @click="setDefault(item.addressId)"><i>设为默认地址</i></a>
                 </div>
                 <div class="addr-opration addr-default" v-show="item.isDefault">默认地址</div>
@@ -119,7 +132,8 @@
           </div>
         </div>
         <div class="next-btn-wrap">
-          <router-link class="btn btn--m btn--red" v-bind:to="{path:'orderConfirm',query:{'addressId':selectAddressId}}">Next</router-link>
+          <!-- 点击下一步时通过query传参，将用户选中的地址的Id传递给后台 -->
+          <router-link class="btn btn--m btn--red" v-bind:to="{path:'orderConfirm',query:{'addressId':selectAddressId}}">下一步</router-link>
         </div>
       </div>
       </div>

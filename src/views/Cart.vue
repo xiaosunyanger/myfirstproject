@@ -4,9 +4,9 @@
     <nav-bread>
         <span>Cart</span>
     </nav-bread>
-        <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/ 2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <defs>
-            <symbol id="icon-add" viewBox="0 0 32 32">
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/ 2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+        <symbol id="icon-add" viewBox="0 0 32 32">
                 <title>add2</title>
                 <path class="path1"
                     d="M15 17h-13.664c-0.554 0-1.002-0.446-1.002-1 0-0.552 0.452-1 1.002-1h13.664v-13.664c0-0.554 0.446-1.002 1-1.002 0.552 0 1 0.452 1 1.002v13.664h13.664c0.554 0 1.002 0.446 1.002 1 0 0.552-0.452 1-1.002 1h-13.664v13.664c0 0.554-0.446 1.002-1 1.002-0.552 0-1-0.452-1-1.002v-13.664z"></path>
@@ -57,7 +57,8 @@
                 <li>Subtotal</li>
                 <li>Edit</li>
             </ul>
-            </div>
+        </div>
+        <!-- 商品列表 -->
         <ul class="cart-item-list" >
             <li v-for="item in cartList">
             <div class="cart-tab-1">
@@ -72,7 +73,7 @@
                     <img v-lazy="'./../../static/'+item.productImage" v-bind:alt="item.productName">
                     </div>
                     <div class="cart-item-title">
-                        <div class="item-name">{{item.productName}}</div>
+                      <div class="item-name">{{item.productName}}</div>
                     </div>
              </div>
             <div class="cart-tab-2">
@@ -107,7 +108,7 @@
     </ul>
     </div>
      </div>
-            <div class="cart-foot-wrap">
+         <div class="cart-foot-wrap">
             <div class="cart-foot-inner">
             <div class="cart-foot-l">
             <div class="item-all-check">
@@ -129,7 +130,7 @@
             </div>
             </div>
             </div>
-            </div>
+         </div>
         </div>
     </div> 
   <Modal :mdShow="modalConfirm" v-on:close="closeModal">
