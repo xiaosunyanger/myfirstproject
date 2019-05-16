@@ -25,7 +25,6 @@
         props:["mdShow"],
         data(){
             return{
-                msg:'hello vue'
             }
         },
         methods:{

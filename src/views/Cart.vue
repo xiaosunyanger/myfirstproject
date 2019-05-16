@@ -265,7 +265,6 @@ export default {
             if(this.checkedCount>0){
                 this.$router.push({
                     path:'/address',
-
                 })
             }
         }

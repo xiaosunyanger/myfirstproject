@@ -133,7 +133,7 @@
         </div>
         <div class="next-btn-wrap">
           <!-- 点击下一步时通过query传参，将用户选中的地址的Id传递给后台 -->
-          <router-link class="btn btn--m btn--red" v-bind:to="{path:'orderConfirm',query:{'addressId':selectAddressId}}">下一步</router-link>
+          <router-link class="btn btn--m btn--red" v-bind:to="{path:'orderConfirm',query:{'addressId':selectAddressId} }">下一步</router-link>
         </div>
       </div>
       </div>
@@ -232,14 +232,12 @@ export default {
           if(item.addressId==this.addressId){
              this.addressList.splice( this.addressList.indexOf(this.addressId),1);
           }else{
-          return;
-          };
+              return;
+              };
           this.isMdShow=false;
-       })
-    }
+         })
+       }
       });
-      //先在页面上删除要删除的地址
-     
     }
     },
 }

@@ -30,7 +30,8 @@
               <div class="navbar-menu-container">
                 <!-- 用nickName的存在与否来控制登入登出状态的显示 -->
                 <span class="navbar-link" v-text="nickName" v-if="nickName"></span>
-                <a href="javascript:void(0)" class="navbar-link" @click="loginFlag=true" v-if="!nickName">Login</a>
+                <a href="javascript:void(0)" class="navbar-link" @click="loginFlag=true" v-if="!nickName">登录</a>
+                <a href="javascript:void(0)" class="navbar-link" @click='register' v-if="!nickName">注册</a>
                 <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="logOut">Logout</a>
                 <div class="navbar-cart-container">
                   <span class="navbar-cart-count" ></span>
@@ -43,6 +44,8 @@
               </div>
             </div>
         </div>
+
+        <!-- 登录框 -->
         <div class="md-modal modal-msg md-modal-transition " v-bind:class="{'md-show':loginFlag}">
           <div class="md-modal-inner">
             <div class="md-top">
@@ -69,10 +72,21 @@
               <div class="login-wrap">
                 <a href="javascript:;" class="btn-login" @click="login">登  录</a>
               </div>
+            <!-- 登录框完成 -->
+              
             </div>
           </div>
         </div>
         <div class="md-overlay" v-if="loginFlag" @click="loginFlag=false"></div>
+
+        <!-- 注册成功后的模态框 -->
+        <Modal :mdShow='showModal' @close='closeModal'>
+          <p slot="message">注册成功，快去登录账号吧</p>
+           <div slot="btnGroup">
+              <a class="btn btn--m" href="javascript:;" @click="login">去登录</a>
+              <a class="btn btn--m" href="javascript:;" @click="showModal=false">取消</a>
+           </div>
+        </Modal>
     </header>
 </template>
 <style>
@@ -148,16 +162,24 @@
 </style>
 <script>
     import './../assets/css/login.css'
+    import Modal  from './Modal'
     import axios from 'axios'//默认从node_modules里加载，无需再多写路径
     export default{
       data(){
         return{
           userName:"",
           userPwd:"",
+          userName1:'',
+          userPwd1:'',
           errorTip:false,
-          loginFlag:false,
+          loginFlag:false,//用来控制登录框的展现
           nickName:"",
+          showResgister:false,//用来控制注册框的展现
+          showModal:false,
         }
+      },
+      components:{
+        Modal,
       },
       mounted(){
         this.checkLogin();
@@ -202,6 +224,14 @@
             }
           })
         },
+        //注册
+        register(){
+          this.showResgister=true;
+          
+        },
+        closeModal(){
+          this.showModal=false;
+        }
       },
     }
 </script>

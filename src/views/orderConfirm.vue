@@ -198,6 +198,7 @@ export default {
               }).then((response)=>{
                   let res=response.data;
                   if(res.status=='0'){
+                      console.log(res.result.orderId)
                     this.$router.push({
                           path:'/orderSuccess?orderId='+res.result.orderId
                       })
