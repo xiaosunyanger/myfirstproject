@@ -32,9 +32,9 @@
                 <span class="navbar-link" v-text="nickName" v-if="nickName"></span>
                 <a href="javascript:void(0)" class="navbar-link" @click="loginFlag=true" v-if="!nickName">登录</a>
                 <a href="javascript:void(0)" class="navbar-link" @click='register' v-if="!nickName">注册</a>
-                <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="logOut">Logout</a>
+                <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="logOut">登出</a>
                 <div class="navbar-cart-container">
-                  <span class="navbar-cart-count" ></span>
+                  <span class="navbar-cart-count"  >{{cartCount}}</span>
                   <a class="navbar-link navbar-cart-link" href="/#/cart">
                     <svg class="navbar-cart-logo">
                       <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
@@ -173,7 +173,6 @@
           userPwd1:'',
           errorTip:false,
           loginFlag:false,//用来控制登录框的展现
-          nickName:"",
           showResgister:false,//用来控制注册框的展现
           showModal:false,
         }
@@ -184,13 +183,21 @@
       mounted(){
         this.checkLogin();
       },
+      computed:{
+        nickName(){
+          return this.$store.state.nickName;
+        },
+        cartCount(){
+          return this.$store.state.cartCount;
+        }
+      },
       methods:{
         //登录校验,查看是否登录
         checkLogin(){
           axios.get("/users/checkLogin").then((response)=>{
             let res=response.data;
             if(res.status=='0'){
-              this.nickName=res.result;
+             this.$store.commit('updateUserInfo',res.result)
             }
           })
         },
@@ -207,7 +214,9 @@
             let res=response.data;
             if(res.status=='0'){
               this.errorTip=false;
-              this.nickName=res.result.userName;
+              this.$store.commit('updateUserInfo',res.result.userName);
+              this.getCartCount();
+              // this.nickName=res.result.userName;
               this.loginFlag=false;
             }else{
               this.errorTip=true;
@@ -220,14 +229,20 @@
           axios.post("/users/logout").then((response)=>{
             let res=response.data;
             if(res.status=='0'){
-              this.nickName="";
+               this.$store.commit('updateUserInfo',"");
             }
           })
-        },
-        //注册
+        },   
+
+      //  getCartCount(){
+      //         axios.get("users/getCartCount").then(res=>{
+      //           var res = res.data;
+      //           this.$store.commit("updateCartCount",res.result);
+      //         });
+      //       },
+    //注册
         register(){
-          this.showResgister=true;
-          
+          this.showResgister=true;   
         },
         closeModal(){
           this.showModal=false;

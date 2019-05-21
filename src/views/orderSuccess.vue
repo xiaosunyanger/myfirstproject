@@ -81,7 +81,7 @@ export default {
           params:{ orderId:orderId,}
         }).then((response)=>{
             let res=response.data;
-            if(res.data=='0'){
+            if(res.status=='0'){
                 this.orderTotal=res.result.orderTotal;
                 this.orderId=res.result.orderId;
             }else{

@@ -116,7 +116,8 @@
                 <span class="checkbox-btn item-check-btn" :class="{'check':checkAllFlag}">
                     <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
                 </span>
-            <span>Select all</span>
+            <span>全选</span>
+            <span>共有{{cartNum}}件商品</span>
             </a>
             </div>
             </div>
@@ -166,9 +167,19 @@ export default {
     },
     mounted(){
         this.init();
+        
     },
     computed:{
         //全选功能实时计算商品选中的数目是否等于商品列表的长度
+        cartNum(){
+            let i=0;
+            this.cartList.forEach((item)=>{
+                i+=parseInt(item.productNum);
+            })
+             console.log(i);
+             this.$store.commit('updateCartCount',i);
+             return i;
+        },
         checkAllFlag(){
             return this.checkedCount == this.cartList.length;
           },
@@ -218,7 +229,11 @@ export default {
                let res=response.data;
                if(res.status='0'){
                    this.modalConfirm=false;
-                   this.init();
+                   this.cartList.forEach((item)=>{
+                if(item.productId==this.productId){
+                           this.cartList.splice(this.cartList.indexOf(this.productId),1);
+                       }
+                   })
                }
            })
         },
@@ -260,7 +275,7 @@ export default {
                 }
             })
         },
-        //商品结算
+        //商品结算,进入下一页，并且来删除被结算的商品
         checkOut(){
             if(this.checkedCount>0){
                 this.$router.push({
