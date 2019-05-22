@@ -163,6 +163,7 @@
 <script>
     import './../assets/css/login.css'
     import Modal  from './Modal'
+    import {mapState} from 'vuex'
     import axios from 'axios'//默认从node_modules里加载，无需再多写路径
     export default{
       data(){
@@ -184,12 +185,7 @@
         this.checkLogin();
       },
       computed:{
-        nickName(){
-          return this.$store.state.nickName;
-        },
-        cartCount(){
-          return this.$store.state.cartCount;
-        }
+       ...mapState(['nickName','cartCount'])
       },
       methods:{
         //登录校验,查看是否登录
@@ -215,7 +211,6 @@
             if(res.status=='0'){
               this.errorTip=false;
               this.$store.commit('updateUserInfo',res.result.userName);
-              this.getCartCount();
               // this.nickName=res.result.userName;
               this.loginFlag=false;
             }else{
@@ -234,12 +229,6 @@
           })
         },   
 
-      //  getCartCount(){
-      //         axios.get("users/getCartCount").then(res=>{
-      //           var res = res.data;
-      //           this.$store.commit("updateCartCount",res.result);
-      //         });
-      //       },
     //注册
         register(){
           this.showResgister=true;   
